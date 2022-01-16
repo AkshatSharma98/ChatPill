@@ -62,13 +62,13 @@ class ChatVC: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func scrollToBottom(){
+    func scrollToBottom(animated: Bool = false) {
         DispatchQueue.main.async { [weak self] in
             guard let count =  self?.vm?.numberOfRows(), count - 1 >= 0 else {
                 return
             }
             let indexPath = IndexPath(row: count - 1, section: 0)
-            self?.tableView.scrollToRow(at: indexPath, at: .bottom, animated: false)
+            self?.tableView.scrollToRow(at: indexPath, at: .bottom, animated: animated)
         }
     }
     
@@ -77,7 +77,6 @@ class ChatVC: UIViewController {
             let height = bottomTextView.frame.height
             tableView.contentInset.bottom = height
         } else {
-           // isKeyboardVisible = false
             tableView.contentInset.bottom = bottomTextView.containerView.frame.height + Commons.getNotchHeight()
         }
     }
@@ -133,9 +132,11 @@ private extension ChatVC {
             tableViewBottomConstraint?.constant = -(bottomTextView.containerView.frame.height + keyboardHeight - 3 * Commons.getNotchHeight())
             self.bottomTextView.updateHeightConstraint(height: -keyboardHeight)
             UIView.animate(withDuration: 0.2, animations: { [weak self] in
-                self?.scrollToBottom()
+              //
                 self?.view.layoutIfNeeded()
-            }, completion: nil)
+            }, completion: { [weak self] _ in
+                self?.scrollToBottom(animated: true)
+            })
         }
     }
     
