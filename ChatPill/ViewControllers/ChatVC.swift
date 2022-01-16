@@ -42,7 +42,7 @@ class ChatVC: UIViewController {
         setupTableView()
         registerForKeyboardNotifications()
         view.backgroundColor = .white
-        vm = ChatVM(delegate: self)
+        vm = ChatVM(delegate: self, name: "akshat", id: "1")
     }
     
     override func viewWillAppear(_ animated: Bool) {

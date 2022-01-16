@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		31748C1427942DAF000B284E /* CDChatModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 31748C1227942DAF000B284E /* CDChatModel.xcdatamodeld */; };
+		31748C1B27943023000B284E /* PersistentStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31748C1A27943023000B284E /* PersistentStorage.swift */; };
+		31748C1D2794311E000B284E /* TestCDVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31748C1C2794311E000B284E /* TestCDVC.swift */; };
+		31748C20279434FD000B284E /* CDChat+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31748C1E279434FD000B284E /* CDChat+CoreDataClass.swift */; };
+		31748C21279434FD000B284E /* CDChat+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31748C1F279434FD000B284E /* CDChat+CoreDataProperties.swift */; };
+		31748C2327943560000B284E /* CDChatRepo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31748C2227943560000B284E /* CDChatRepo.swift */; };
+		31748C2527945E01000B284E /* ChatManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31748C2427945E01000B284E /* ChatManagerProtocol.swift */; };
 		31B700CC2792CD4700C5C253 /* GithubApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B700CB2792CD4700C5C253 /* GithubApiManager.swift */; };
 		31B700CE2792CEE100C5C253 /* UsersDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B700CD2792CEE100C5C253 /* UsersDTO.swift */; };
 		31B700D12792D12500C5C253 /* HomePageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B700D02792D12500C5C253 /* HomePageVC.swift */; };
@@ -36,6 +43,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		31748C1327942DAF000B284E /* CDChatModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CDChatModel.xcdatamodel; sourceTree = "<group>"; };
+		31748C1A27943023000B284E /* PersistentStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersistentStorage.swift; sourceTree = "<group>"; };
+		31748C1C2794311E000B284E /* TestCDVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCDVC.swift; sourceTree = "<group>"; };
+		31748C1E279434FD000B284E /* CDChat+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDChat+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
+		31748C1F279434FD000B284E /* CDChat+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDChat+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
+		31748C2227943560000B284E /* CDChatRepo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDChatRepo.swift; sourceTree = "<group>"; };
+		31748C2427945E01000B284E /* ChatManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatManagerProtocol.swift; sourceTree = "<group>"; };
 		31B700CB2792CD4700C5C253 /* GithubApiManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GithubApiManager.swift; sourceTree = "<group>"; };
 		31B700CD2792CEE100C5C253 /* UsersDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersDTO.swift; sourceTree = "<group>"; };
 		31B700D02792D12500C5C253 /* HomePageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomePageVC.swift; sourceTree = "<group>"; };
@@ -77,6 +91,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		31748C1927943008000B284E /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				31748C1A27943023000B284E /* PersistentStorage.swift */,
+				31748C2227943560000B284E /* CDChatRepo.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
 		31B700C92792CD0E00C5C253 /* APIManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -100,6 +123,7 @@
 				31B700D02792D12500C5C253 /* HomePageVC.swift */,
 				31DCF9242791E6F10058A768 /* ViewController.swift */,
 				31B7012227931F6E00C5C253 /* ChatVC.swift */,
+				31748C1C2794311E000B284E /* TestCDVC.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -135,6 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				31B700DF2792D9E400C5C253 /* GetUsersRepository.swift */,
+				31748C2427945E01000B284E /* ChatManagerProtocol.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -158,6 +183,9 @@
 		31DCF91F2791E6F10058A768 /* ChatPill */ = {
 			isa = PBXGroup;
 			children = (
+				31748C1E279434FD000B284E /* CDChat+CoreDataClass.swift */,
+				31748C1F279434FD000B284E /* CDChat+CoreDataProperties.swift */,
+				31748C1927943008000B284E /* Storage */,
 				31B700DE2792D9BC00C5C253 /* Repository */,
 				31B700DB2792D87F00C5C253 /* UseCases */,
 				31B700DA2792D87500C5C253 /* ViewModels */,
@@ -170,6 +198,7 @@
 				31DCF9222791E6F10058A768 /* SceneDelegate.swift */,
 				31DCF9292791E6F30058A768 /* Assets.xcassets */,
 				31DCF92E2791E6F30058A768 /* Info.plist */,
+				31748C1227942DAF000B284E /* CDChatModel.xcdatamodeld */,
 			);
 			path = ChatPill;
 			sourceTree = "<group>";
@@ -270,10 +299,15 @@
 				31B7012327931F6E00C5C253 /* ChatVC.swift in Sources */,
 				31B701632793E5FD00C5C253 /* LoaderView.swift in Sources */,
 				31B700D32792D14200C5C253 /* UserChatTVC.swift in Sources */,
+				31748C1B27943023000B284E /* PersistentStorage.swift in Sources */,
 				31B701292793246700C5C253 /* ReceivedMessageTVC.swift in Sources */,
 				31DCF93B2792103F0058A768 /* SentMessageView.swift in Sources */,
 				31DCF9392791E9E30058A768 /* Constants.swift in Sources */,
+				31748C2527945E01000B284E /* ChatManagerProtocol.swift in Sources */,
+				31748C1D2794311E000B284E /* TestCDVC.swift in Sources */,
+				31748C21279434FD000B284E /* CDChat+CoreDataProperties.swift in Sources */,
 				31B700D12792D12500C5C253 /* HomePageVC.swift in Sources */,
+				31748C2327943560000B284E /* CDChatRepo.swift in Sources */,
 				31B700E42792DD5600C5C253 /* HomePageVM.swift in Sources */,
 				31B700CE2792CEE100C5C253 /* UsersDTO.swift in Sources */,
 				31B70169279414AB00C5C253 /* ChatMessageModel.swift in Sources */,
@@ -286,9 +320,11 @@
 				31B700D52792D40E00C5C253 /* UIImageView+Extension.swift in Sources */,
 				31B700DD2792D88F00C5C253 /* GetUsers.swift in Sources */,
 				31B700CC2792CD4700C5C253 /* GithubApiManager.swift in Sources */,
+				31748C20279434FD000B284E /* CDChat+CoreDataClass.swift in Sources */,
 				31B701672794148600C5C253 /* ChatVM.swift in Sources */,
 				31DCF9212791E6F10058A768 /* AppDelegate.swift in Sources */,
 				31B700E02792D9E400C5C253 /* GetUsersRepository.swift in Sources */,
+				31748C1427942DAF000B284E /* CDChatModel.xcdatamodeld in Sources */,
 				31DCF9232791E6F10058A768 /* SceneDelegate.swift in Sources */,
 				31B700D82792D62100C5C253 /* ChatModel.swift in Sources */,
 				31B70127279323FC00C5C253 /* ReceivedMessageView.swift in Sources */,
@@ -476,6 +512,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		31748C1227942DAF000B284E /* CDChatModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				31748C1327942DAF000B284E /* CDChatModel.xcdatamodel */,
+			);
+			currentVersion = 31748C1327942DAF000B284E /* CDChatModel.xcdatamodel */;
+			path = CDChatModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 31DCF9152791E6F10058A768 /* Project object */;
 }

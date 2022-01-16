@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ChatType {
+enum ChatType: Codable {
     case received
     case sent
 }
