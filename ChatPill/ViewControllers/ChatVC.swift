@@ -52,10 +52,13 @@ class ChatVC: UIViewController {
     }
     
     func scrollToBottom(){
-//        DispatchQueue.main.async {
-//            let indexPath = IndexPath(row: 9, section: 0)
-//            self.tableView.scrollToRow(at: indexPath, at: .bottom, animated: false)
-//        }
+        DispatchQueue.main.async { [weak self] in
+            guard let count =  self?.vm?.numberOfRows(), count - 1 >= 0 else {
+                return
+            }
+            let indexPath = IndexPath(row: count - 1, section: 0)
+            self?.tableView.scrollToRow(at: indexPath, at: .bottom, animated: false)
+        }
     }
     
     override func viewDidLayoutSubviews() {
@@ -119,8 +122,7 @@ private extension ChatVC {
             tableViewBottomConstraint?.constant = -(bottomTextView.containerView.frame.height + keyboardHeight - 3 * Commons.getNotchHeight())
             scrollToBottom()
             UIView.animate(withDuration: 0.2, animations: { [weak self] in
-//                let indexPath = IndexPath(row: 9, section: 0)
-//                self?.tableView.scrollToRow(at: indexPath, at: .bottom, animated: false)
+                self?.scrollToBottom()
                 self?.view.layoutIfNeeded()
             }, completion: nil)
         }
@@ -184,6 +186,7 @@ extension ChatVC: UITableViewDataSource {
 extension ChatVC: ChatVMDelegate {
     func updateView() {
         tableView.reloadData()
+        scrollToBottom()
     }
 }
 
