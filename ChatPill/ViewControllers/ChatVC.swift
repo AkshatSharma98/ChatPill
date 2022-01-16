@@ -129,9 +129,9 @@ private extension ChatVC {
         if let userInfo = notification.userInfo {
             let keyboardFrame =  (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
             let keyboardHeight = keyboardFrame.height
-            self.bottomTextView.updateHeightConstraint(height: -keyboardHeight)
+            
             tableViewBottomConstraint?.constant = -(bottomTextView.containerView.frame.height + keyboardHeight - 3 * Commons.getNotchHeight())
-            scrollToBottom()
+            self.bottomTextView.updateHeightConstraint(height: -keyboardHeight)
             UIView.animate(withDuration: 0.2, animations: { [weak self] in
                 self?.scrollToBottom()
                 self?.view.layoutIfNeeded()
@@ -202,8 +202,15 @@ extension ChatVC: ChatVMDelegate {
 }
 
 extension ChatVC: BottomTextViewDelegate {
+    func layoutNeeded() {
+        UIView.animate(withDuration: 0.2, animations: { [weak self] in
+            self?.view.layoutIfNeeded()
+            self?.scrollToBottom()
+        }, completion: nil)
+    }
+    
     func didClickSendButton(text: String) {
-        bottomTextView.textView.text = nil
+        bottomTextView.setTextViewToNil()
         vm?.didClickSend(message: text)
     }
 }

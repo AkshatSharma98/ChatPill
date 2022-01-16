@@ -84,6 +84,10 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: BottomTextViewDelegate {
+    func layoutNeeded() {
+        
+    }
+    
     func didClickSendButton(text: String) {
         
     }

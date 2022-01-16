@@ -10,12 +10,16 @@ import UIKit
 
 protocol BottomTextViewDelegate: AnyObject {
     func didClickSendButton(text: String)
+    func layoutNeeded()
 }
 
 class BottomTextView: UIView {
     
     private weak var delegate: BottomTextViewDelegate?
     private var bottomConstraint: NSLayoutConstraint?
+    private var textViewHeightConstraint: NSLayoutConstraint?
+    private let minHeight: CGFloat = 40
+    private let maxHeight: CGFloat = 100
     
     let containerView: UIView = {
         let view  = UIView()
@@ -32,6 +36,7 @@ class BottomTextView: UIView {
     
     let textView: UITextView = {
         let textView = UITextView()
+        textView.font = UIFont.systemFont(ofSize: 20)
         textView.translatesAutoresizingMaskIntoConstraints = false
         return textView
     }()
@@ -39,6 +44,7 @@ class BottomTextView: UIView {
     private let sendButton: UIButton = {
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitleColor(Commons.getColorFromHex(hex: "#15186F"), for: .normal)
         return button
     }()
     
@@ -46,7 +52,7 @@ class BottomTextView: UIView {
         super.init(frame: .zero)
         self.delegate = delegate
         createViews()
-        self.backgroundColor = .systemGray
+        self.backgroundColor = Commons.getColorFromHex(hex: "#D7D7D7")
     }
     
     required init?(coder: NSCoder) {
@@ -59,10 +65,16 @@ class BottomTextView: UIView {
     
     @objc func didClickSend() {
         let text = textView.text
-        guard let textUnwrapped = text else {
+        guard let textUnwrapped = text, textUnwrapped.isEmpty == false else {
             return
         }
         self.delegate?.didClickSendButton(text: textUnwrapped)
+    }
+    
+    func setTextViewToNil() {
+        textView.text = nil
+        textViewHeightConstraint?.constant = minHeight
+        self.delegate?.layoutNeeded()
     }
 }
 
@@ -150,6 +162,9 @@ private extension BottomTextView {
                            multiplier: 1,
                            constant: 0).isActive = true
         
+        textViewHeightConstraint = textView.heightAnchor.constraint(equalToConstant: minHeight)
+        textViewHeightConstraint?.isActive = true
+        
         textViewContainer.layer.cornerRadius = 15
         sendButton.setTitle("Send", for: .normal)
         textView.delegate = self
@@ -180,7 +195,7 @@ private extension BottomTextView {
                            toItem: containerView,
                            attribute: .bottom,
                            multiplier: 1,
-                           constant: -12).isActive = true
+                           constant: -16).isActive = true
         
         NSLayoutConstraint(item: textViewContainer,
                            attribute: .leading,
@@ -220,13 +235,6 @@ private extension BottomTextView {
 
 extension BottomTextView: UITextViewDelegate {
     
-    func textViewDidEndEditing(_ textView: UITextView) {
-        let text = textView.text
-        if text == nil || text?.isEmpty == true {
-            textView.text = "Aa"
-        }
-    }
-    
     // hides text views
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if (text == "\n") {
@@ -244,8 +252,29 @@ extension BottomTextView: UITextViewDelegate {
         return true
     }
     
+    func textViewDidChange(_ textView: UITextView) {
+        var height = minHeight
+        
+        if textView.contentSize.height <= minHeight {
+            height = minHeight
+        } else if textView.contentSize.height >= maxHeight {
+            height = maxHeight
+        } else {
+            height = textView.contentSize.height
+        }
+        
+        //self.placeHolderLabel.isHidden = !textView.text.isEmpty
+        textViewHeightConstraint?.constant = height
+        self.delegate?.layoutNeeded()
+        UIView.animate(withDuration: 0.1) { [weak self] in
+            self?.layoutIfNeeded()
+        }
+    }
+    
 //
 //    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
 //        textField.resignFirstResponder()
 //    }
 }
+
+//Akshat is very good boy, he will make ensure his family gets his complete time and remain very happy, god will help me.
