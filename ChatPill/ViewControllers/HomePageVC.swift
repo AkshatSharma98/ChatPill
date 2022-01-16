@@ -29,6 +29,14 @@ class HomePageVC: UIViewController {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delaysContentTouches = false
+        tableView.separatorStyle = .none
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedSectionHeaderHeight = 0
+        tableView.sectionHeaderHeight = 0
+        tableView.estimatedRowHeight = 44
+        tableView.contentInsetAdjustmentBehavior = .never
+        tableView.keyboardDismissMode = .onDrag
+        tableView.showsVerticalScrollIndicator = false
         return tableView
     }()
     
@@ -104,6 +112,9 @@ class HomePageVC: UIViewController {
         NSLayoutConstraint(item: loaderView, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1, constant: 0).isActive = true
         
         NSLayoutConstraint(item: loaderView, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1, constant: 0).isActive = true
+        
+        tableView.tableHeaderView = StretchyHeader()
+        tableView.tableHeaderView?.frame = CGRect(x: 0, y: 0, width: 0, height: 300)
     }
 }
 
@@ -132,8 +143,18 @@ extension HomePageVC: UITableViewDelegate {
         print(indexPath)
         let topVC = Commons.getTopVC()
         
-        topVC?.navigationController?.pushViewController(ChatVC(), animated: true)
+        let data = vm?.getDataModelFor(indexPath: indexPath)
+        
+        if let name = data?.title {
+            topVC?.navigationController?.pushViewController(ChatVC(name: name), animated: true)
+        }
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let header = tableView.tableHeaderView as? StretchyHeader
+        header?.viewDidScrolled(scrollView)
+    }
+
 }
 
 extension HomePageVC: HomePageVMDelegate {

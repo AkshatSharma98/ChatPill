@@ -13,14 +13,13 @@ class HeaderView: UIView {
     let label: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Akshat"
         return label
     }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         createViews()
-        self.backgroundColor = .yellow
+        self.backgroundColor = .white
     }
     
     required init?(coder: NSCoder) {

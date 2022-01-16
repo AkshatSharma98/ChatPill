@@ -13,6 +13,7 @@ class ChatVC: UIViewController {
     private var tableViewBottomConstraint: NSLayoutConstraint?
     private var isKeyboardVisible: Bool = false
     private var vm: ChatVM?
+    private let name: String
     
     private let tableView: UITableView = {
         let tableView = UITableView()
@@ -42,13 +43,23 @@ class ChatVC: UIViewController {
         setupTableView()
         registerForKeyboardNotifications()
         view.backgroundColor = .white
-        vm = ChatVM(delegate: self, name: "akshat", id: "1")
+        vm = ChatVM(delegate: self, name: name, id: name)
+        self.title = "@\(name)"
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tableView.reloadData()
         scrollToBottom()
+    }
+    
+    init(name: String) {
+        self.name = name
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     func scrollToBottom(){
