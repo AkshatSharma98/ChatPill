@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 
+///Extension to download and set image in UIImageView
 extension UIImageView {
     
     func setImage(url: URL) {
@@ -23,7 +24,6 @@ extension UIImageView {
             DispatchQueue.main.async {
                 self.image = image
             }
-            
             
         }
         

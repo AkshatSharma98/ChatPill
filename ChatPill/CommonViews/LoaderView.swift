@@ -8,12 +8,23 @@
 import Foundation
 import UIKit
 
-class LoaderView: UIView {
+final class LoaderView: UIView {
     
+    ///MARK: UI Components
     private let containerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
+    }()
+    
+    private let messageLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.numberOfLines = 0
+        label.font = UIFont.systemFont(ofSize: 20)
+        label.textColor = Commons.getColorFromHex(hex: "#5c6160")
+        label.textAlignment = .center
+        return label
     }()
     
     private let loader: UIActivityIndicatorView = {
@@ -34,12 +45,31 @@ class LoaderView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    private func addViews() {
-        addSubview(containerView)
-        containerView.addSubview(loader)
+    func startLoader() {
+        loader.isHidden = false
+        loader.startAnimating()
     }
     
-    private func createViews() {
+    func stopLoader() {
+        loader.isHidden = true
+        loader.stopAnimating()
+    }
+    
+    func setMessage(text: String?, shouldHideLoader: Bool) {
+        messageLabel.text = text
+        shouldHideLoader ? stopLoader() : startLoader()
+    }
+}
+
+private extension LoaderView {
+    
+    func addViews() {
+        addSubview(containerView)
+        containerView.addSubview(loader)
+        containerView.addSubview(messageLabel)
+    }
+    
+    func createViews() {
         NSLayoutConstraint(item: containerView, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: containerView, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
         
@@ -50,13 +80,13 @@ class LoaderView: UIView {
         NSLayoutConstraint(item: loader, attribute: .centerX, relatedBy: .equal, toItem: containerView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
         
         NSLayoutConstraint(item: loader, attribute: .centerY, relatedBy: .equal, toItem: containerView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-    }
-    
-    func startLoader() {
-        loader.startAnimating()
-    }
-    
-    func stopLoader() {
-        loader.stopAnimating()
+        
+        NSLayoutConstraint(item: messageLabel, attribute: .centerX, relatedBy: .equal, toItem: containerView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        
+        NSLayoutConstraint(item: messageLabel, attribute: .bottom, relatedBy: .equal, toItem: loader, attribute: .top, multiplier: 1, constant: -12).isActive = true
+        
+        NSLayoutConstraint(item: messageLabel, attribute: .leading, relatedBy: .equal, toItem: containerView, attribute: .leading, multiplier: 1, constant: 12).isActive = true
+        
+        NSLayoutConstraint(item: messageLabel, attribute: .trailing, relatedBy: .equal, toItem: containerView, attribute: .trailing, multiplier: 1, constant: -12).isActive = true
     }
 }

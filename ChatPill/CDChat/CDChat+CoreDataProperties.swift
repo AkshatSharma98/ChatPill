@@ -9,7 +9,8 @@
 import Foundation
 import CoreData
 
-
+///Core Data - Chat Model
+///CD Stands For CoreData
 extension CDChat {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<CDChat> {
@@ -23,21 +24,19 @@ extension CDChat {
 }
 
 extension CDChat : Identifiable {
-
-
+    
     func convertToChatHistory() -> ChatHistory? {
         
         var messages: [ChatMessage]?
         if let messagesDataUnwrapped = messagesData {
             do {
                 messages = try JSONDecoder().decode([ChatMessage].self,
-                                                        from: messagesDataUnwrapped)
+                                                    from: messagesDataUnwrapped)
             } catch {
-                
+                debugPrint(error.localizedDescription)
             }
         }
         return ChatHistory(name: name, id: id, messages: messages)
     }
-    
     
 }

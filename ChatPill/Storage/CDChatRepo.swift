@@ -8,7 +8,7 @@
 import Foundation
 import CoreData
 
-class CDChatRepo: ChatManagerProtocol {
+final class CDChatRepo: ChatManagerProtocol {
     
     func saveChatMessage(for id: String, name: String, chatMessage: ChatMessage) {
         guard let cdChat = getChatHistory(from: id) else {
@@ -17,13 +17,13 @@ class CDChatRepo: ChatManagerProtocol {
         }
         
         let chatHistory = cdChat.convertToChatHistory()
-        var array = chatHistory?.messages
+        var messageArray = chatHistory?.messages
         
-        array?.append(chatMessage)
+        messageArray?.append(chatMessage)
         cdChat.name = name
         cdChat.id = id
     
-        if let array = array {
+        if let array = messageArray {
             let newData = chatMessageArrayToData(chatArray: array)
             cdChat.messagesData = newData
             PersistentStorage.shared.saveContext()
@@ -37,6 +37,9 @@ class CDChatRepo: ChatManagerProtocol {
         let chatHistory = cdChat.convertToChatHistory()
         return chatHistory?.messages
     }
+}
+
+extension CDChatRepo {
     
     func getChatHistory(from id: String) -> CDChat? {
         
@@ -50,7 +53,6 @@ class CDChatRepo: ChatManagerProtocol {
             if cdChat.count > 0 {
                 return cdChat[0]
             }
-            
         } catch {
             return nil
         }

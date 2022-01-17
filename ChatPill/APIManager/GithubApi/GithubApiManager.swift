@@ -8,7 +8,20 @@
 import Foundation
 
 protocol GithubApiManagerDelegate: AnyObject {
-    func didFetchUsers(users: [UsersDTO]?)
+    func didFetchUsers(response: GetUsersResponse?)
+    func didFailToFetch(response: GetUsersResponse?)
+}
+
+class GetUsersResponse: ResponseModel {
+    let message: String?
+    let users: [UsersDTO]?
+    let statusCode: Int?
+    
+    init(message: String?, users: [UsersDTO]?, statusCode: Int?) {
+        self.message = message
+        self.users = users
+        self.statusCode = statusCode
+    }
 }
 
 class GithubApiManager {
@@ -20,7 +33,6 @@ class GithubApiManager {
     
     private let sessionManager = URLSession(configuration: .default)
     
-    
     init(with delegate: GithubApiManagerDelegate?) {
         self.delegate = delegate
     }
@@ -30,39 +42,67 @@ class GithubApiManager {
         let userApiEndPoint = baseUrl + getUsersEndPoint
         
         guard let url = URL(string: userApiEndPoint) else {
+            self.delegate?.didFailToFetch(response: GetUsersResponse(message: "Not a valid Api URL",
+                                                                     users: nil,
+                                                                     statusCode: nil))
             return
         }
         
         let urlRequest = URLRequest(url: url)
         
-        let dataTask = sessionManager.dataTask(with: urlRequest) { data, response, error in
+        let dataTask = sessionManager.dataTask(with: urlRequest) { [weak self] data, response, error in
             
-            if let error = error {
-                print(error)
+            guard let response = response as? HTTPURLResponse else {
+                self?.didFailToFetchData(message: nil, statusCode: nil, users: nil)
                 return
             }
-            
-            guard let response = response as? HTTPURLResponse,
-                  response.statusCode == Constants.successStatusCode,
-                  let data = data
-            else {
+            guard let data = data else {
+                self?.didFailToFetchData(message: nil,
+                                         statusCode: response.statusCode,
+                                         users: nil)
                 return
             }
             
             do {
                 let users = try JSONDecoder().decode([UsersDTO].self, from: data)
-                
-                DispatchQueue.main.async {
-                    self.delegate?.didFetchUsers(users: users)
-                }
-                
-                
-                print(users)
+                self?.didFetchData(message: nil, statusCode: response.statusCode, users: users)
             } catch {
-                print("error while decoding")
+                do {
+                    let failureResponse = try JSONDecoder().decode(FailedResponse.self, from: data)
+                    self?.didFetchData(message: failureResponse.message,
+                                       statusCode: response.statusCode,
+                                       users: nil)
+                } catch {
+                    self?.didFailToFetchData(message: error.localizedDescription,
+                                             statusCode: response.statusCode,
+                                             users: nil)
+                }
             }
         }
         
         dataTask.resume()
+    }
+}
+
+private extension GithubApiManager {
+    
+    struct FailedResponse: Decodable {
+        let message: String?
+    }
+    
+    func didFetchData(message: String?, statusCode: Int?, users: [UsersDTO]?) {
+        DispatchQueue.main.async {
+            self.delegate?.didFetchUsers(response: GetUsersResponse(message: message,
+                                                                    users: users,
+                                                                    statusCode: statusCode))
+        }
+    }
+    
+    func didFailToFetchData(message: String?, statusCode: Int?, users: [UsersDTO]?) {
+        DispatchQueue.main.async {
+            self.delegate?.didFailToFetch(response: GetUsersResponse(message: message,
+                                                                     users: users,
+                                                                     statusCode: statusCode))
+        }
     }
 }

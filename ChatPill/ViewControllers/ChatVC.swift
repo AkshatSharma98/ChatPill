@@ -10,11 +10,13 @@ import UIKit
 
 class ChatVC: UIViewController {
     
+    ///MARK:  Private Vars
     private var tableViewBottomConstraint: NSLayoutConstraint?
     private var isKeyboardVisible: Bool = false
     private var vm: ChatVM?
     private let name: String
     
+    ///MARK: UI Components
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -36,6 +38,22 @@ class ChatVC: UIViewController {
         return view
     }()
     
+    init(name: String) {
+        self.name = name
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        tableView.reloadData()
+        scrollToBottom()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         addViews()
@@ -47,38 +65,9 @@ class ChatVC: UIViewController {
         self.title = "@\(name)"
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
-        tableView.reloadData()
-        scrollToBottom()
-    }
-    
-    init(name: String) {
-        self.name = name
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    func scrollToBottom(animated: Bool = false) {
-        DispatchQueue.main.async { [weak self] in
-            guard let count =  self?.vm?.numberOfRows(), count - 1 >= 0 else {
-                return
-            }
-            let indexPath = IndexPath(row: count - 1, section: 0)
-            self?.tableView.scrollToRow(at: indexPath, at: .bottom, animated: animated)
-        }
-    }
-    
     override func viewDidLayoutSubviews() {
         if isKeyboardVisible == false {
-            let height = bottomTextView.frame.height
-            tableView.contentInset.bottom = height
-        } else {
-            tableView.contentInset.bottom = bottomTextView.containerView.frame.height //+ Commons.getNotchHeight()
+            tableView.contentInset.bottom = bottomTextView.frame.height
         }
     }
 }
@@ -123,37 +112,7 @@ private extension ChatVC {
                            forCellReuseIdentifier: SentMessageTVC.self.description())
     }
     
-    @objc
-    func keyboardWillShowNotification(_ notification: NSNotification) {
-        isKeyboardVisible = true
-        if let userInfo = notification.userInfo {
-            let keyboardFrame =  (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
-            let keyboardHeight = keyboardFrame.height
-            
-            tableViewBottomConstraint?.constant = -(keyboardHeight)
-            self.bottomTextView.updateHeightConstraint(height: -keyboardHeight)
-            UIView.animate(withDuration: 0.2, animations: { [weak self] in
-              //
-                self?.view.layoutIfNeeded()
-            }, completion: { [weak self] _ in
-                self?.scrollToBottom(animated: true)
-            })
-        }
-    }
-    
-    @objc
-    func keyboardWillHideNotification(_ notification: NSNotification) {
-        isKeyboardVisible = false
-        tableViewBottomConstraint?.constant = 0
-        self.bottomTextView.updateHeightConstraint(height: -Commons.getNotchHeight())
-        UIView.animate(withDuration: 0.2, animations: { [weak self] in
-            self?.view.layoutIfNeeded()
-        }, completion:  { [weak self] _ in
-            self?.scrollToBottom(animated: true)
-        })
-    }
-    
-    private func registerForKeyboardNotifications() {
+    func registerForKeyboardNotifications() {
         let notifier = NotificationCenter.default
         notifier.addObserver(self,
                              selector: #selector(keyboardWillShowNotification(_:)),
@@ -164,12 +123,56 @@ private extension ChatVC {
                              name: UIWindow.keyboardWillHideNotification,
                              object: nil)
     }
+    
+    @objc func keyboardWillShowNotification(_ notification: NSNotification) {
+        isKeyboardVisible = true
+        if let userInfo = notification.userInfo {
+            guard let keyboardFrame =  (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
+                return
+            }
+            let keyboardHeight = keyboardFrame.height
+            
+            tableViewBottomConstraint?.constant = -keyboardHeight
+            self.bottomTextView.updateHeightConstraint(newValue: -keyboardHeight)
+            tableView.contentInset.bottom = bottomTextView.containerView.frame.height
+            UIView.animate(withDuration: 0.2, animations: { [weak self] in
+                self?.view.layoutIfNeeded()
+            }, completion: { [weak self] _ in
+                self?.scrollToBottom(animated: true)
+            })
+        }
+    }
+    
+    @objc func keyboardWillHideNotification(_ notification: NSNotification) {
+        isKeyboardVisible = false
+        tableViewBottomConstraint?.constant = 0
+        self.bottomTextView.updateHeightConstraint(newValue: -Commons.getNotchHeight())
+        UIView.animate(withDuration: 0.2, animations: { [weak self] in
+            self?.view.layoutIfNeeded()
+        }, completion:  { [weak self] _ in
+            self?.scrollToBottom(animated: true)
+        })
+    }
+    
+    func scrollToBottom(animated: Bool = false) {
+        DispatchQueue.main.async { [weak self] in
+            guard let count =  self?.vm?.numberOfRows(), count - 1 >= 0 else {
+                return
+            }
+            let indexPath = IndexPath(row: count - 1, section: 0)
+            self?.tableView.scrollToRow(at: indexPath, at: .bottom, animated: animated)
+        }
+    }
 }
 
+///MARK: UITableViewDelegate
 extension ChatVC: UITableViewDelegate {
+    
 }
 
+///MARK: UITableViewDataSource
 extension ChatVC: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return vm?.numberOfRows() ?? 0
     }
@@ -198,6 +201,7 @@ extension ChatVC: UITableViewDataSource {
     }
 }
 
+///MARK: ChatVMDelegate
 extension ChatVC: ChatVMDelegate {
     func updateView() {
         tableView.reloadData()
@@ -205,12 +209,12 @@ extension ChatVC: ChatVMDelegate {
     }
 }
 
+///MARK: BottomTextViewDelegate
 extension ChatVC: BottomTextViewDelegate {
-    func layoutNeeded() {
-        UIView.animate(withDuration: 0.2, animations: { [weak self] in
-            self?.view.layoutIfNeeded()
-        }, completion: { [weak self] _ in
-            self?.scrollToBottom()})
+    func updateInsetIfNeeded(height: CGFloat) {
+        print("###", height)
+        tableView.contentInset.bottom = height
+        scrollToBottom()
     }
     
     func didClickSendButton(text: String) {

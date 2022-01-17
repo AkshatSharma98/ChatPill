@@ -7,9 +7,21 @@
 
 import Foundation
 
-
 protocol GetUsersRepositoryDelegate: AnyObject {
-    func didFetchUsers(users: [User]?)
+    func didFetchUsers(getUserData: GetUsersData?)
+    func didFailToFetchUsers(getUserData: GetUsersData?)
+}
+
+class GetUsersData: ResponseModel {
+    let statusCode: Int?
+    let message: String?
+    let users: [User]?
+    
+    init(statusCode: Int?, message: String?, users: [User]?) {
+        self.statusCode = statusCode
+        self.message = message
+        self.users = users
+    }
 }
 
 class GetUsersRepository {
@@ -27,14 +39,33 @@ class GetUsersRepository {
 }
 
 extension GetUsersRepository: GithubApiManagerDelegate {
+    func didFetchUsers(response: GetUsersResponse?) {
+        if response?.statusCode != Constants.successStatusCode {
+            didFailToFetch(response: response)
+        }
+        self.delegate?.didFetchUsers(getUserData: GetUsersData(statusCode: response?.statusCode,
+                                                               message: response?.message,
+                                                               users: getUsersArray(from: response?.users)))
+    }
     
-    func didFetchUsers(users: [UsersDTO]?) {
+    func didFailToFetch(response: GetUsersResponse?) {
+        self.delegate?.didFailToFetchUsers(getUserData: GetUsersData(statusCode: response?.statusCode,
+                                                                     message: response?.message,
+                                                                     users: getUsersArray(from: response?.users)))
+    }
+}
+
+private extension GetUsersRepository {
+    
+    func getUsersArray(from usersDTO: [UsersDTO]?) -> [User]? {
+        guard let usersDTOUnwrapped = usersDTO, usersDTOUnwrapped.count > 0 else {
+            return nil
+        }
         var usersLocal = [User]()
-        users?.forEach({ userDTO in
+        usersDTOUnwrapped.forEach({ userDTO in
             let user = User(name: userDTO.userName, imgUrl: userDTO.profileImgUrl)
             usersLocal.append(user)
         })
-        
-        self.delegate?.didFetchUsers(users: usersLocal)
+        return usersLocal
     }
 }

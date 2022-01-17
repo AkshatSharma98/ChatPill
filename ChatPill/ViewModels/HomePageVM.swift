@@ -39,7 +39,13 @@ class HomePageVM {
     }
 }
 
+///MARK: GetUsersDelegate
 extension HomePageVM: GetUsersDelegate {
+    
+    func didFailToFetchUsers(message: String?) {
+        
+    }
+    
     func didFetchUsers(users: [User]?) {
         self.users = users
         self.delegate?.didFetchUsers()

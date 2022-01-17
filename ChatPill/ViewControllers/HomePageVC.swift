@@ -8,11 +8,12 @@
 import Foundation
 import UIKit
 
-//VC - ViewController
 class HomePageVC: UIViewController {
     
+    ///MARK: ViewModel
     private var vm: HomePageVM?
     
+    ///MARK: UI Components
     private let loaderView: LoaderView = {
         let loaderView = LoaderView()
         loaderView.translatesAutoresizingMaskIntoConstraints = false
@@ -37,36 +38,9 @@ class HomePageVC: UIViewController {
         tableView.contentInsetAdjustmentBehavior = .never
         tableView.keyboardDismissMode = .onDrag
         tableView.showsVerticalScrollIndicator = false
+        tableView.contentInset.bottom = Commons.getNotchHeight()
         return tableView
     }()
-    
-    func addViews() {
-        view.addSubview(headerView)
-        view.addSubview(tableView)
-        view.addSubview(loaderView)
-    }
-    
-    func hideLoaderView() {
-        loaderView.isHidden = true
-        loaderView.stopLoader()
-    }
-    
-    func showLoader() {
-        view.bringSubviewToFront(loaderView)
-        loaderView.isHidden = false
-        loaderView.startLoader()
-    }
-    
-    func setupTableView() {
-        tableView.delegate = self
-        tableView.dataSource = self
-        registerCells()
-    }
-    
-    func registerCells() {
-        tableView.register(UserChatTVC.self,
-                           forCellReuseIdentifier: UserChatTVC.self.description())
-    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -85,10 +59,18 @@ class HomePageVC: UIViewController {
         showLoader()
     }
     
+}
+
+private extension HomePageVC {
+    
+    func addViews() {
+        view.addSubview(headerView)
+        view.addSubview(tableView)
+        view.addSubview(loaderView)
+    }
+    
     func createViews() {
         NSLayoutConstraint(item: headerView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 0).isActive = true
-        
-//        NSLayoutConstraint(item: headerView, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
         
         NSLayoutConstraint(item: headerView, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1, constant: 0).isActive = true
         
@@ -115,9 +97,33 @@ class HomePageVC: UIViewController {
         tableView.tableHeaderView = StretchyHeader()
         tableView.tableHeaderView?.frame = CGRect(x: 0, y: 0, width: 0, height: 300)
     }
+    
+    func hideLoaderView() {
+        loaderView.isHidden = true
+        loaderView.stopLoader()
+    }
+    
+    func showLoader() {
+        view.bringSubviewToFront(loaderView)
+        loaderView.isHidden = false
+        loaderView.startLoader()
+    }
+    
+    func setupTableView() {
+        tableView.delegate = self
+        tableView.dataSource = self
+        registerCells()
+    }
+    
+    func registerCells() {
+        tableView.register(UserChatTVC.self,
+                           forCellReuseIdentifier: UserChatTVC.self.description())
+    }
 }
 
+///MARK: UITableViewDataSource
 extension HomePageVC: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return vm?.numberOfRowsInSection(section: section) ?? 0
     }
@@ -136,6 +142,7 @@ extension HomePageVC: UITableViewDataSource {
     }
 }
 
+///MARK: UITableViewDelegate
 extension HomePageVC: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -156,10 +163,11 @@ extension HomePageVC: UITableViewDelegate {
 
 }
 
+///MARK: HomePageVMDelegate
 extension HomePageVC: HomePageVMDelegate {
     
     func didFetchUsers() {
-        hideLoaderView()
-        tableView.reloadData()
+        self.hideLoaderView()
+        self.tableView.reloadData()
     }
 }

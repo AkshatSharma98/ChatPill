@@ -8,19 +8,20 @@
 import Foundation
 import UIKit
 
-
-class StretchyHeader: UIView {
+final class StretchyHeader: UIView {
     
+    ///MARK: Private vars
     private var imageViewHeightConstraint: NSLayoutConstraint?
     
-    let containerView: UIView = {
+    ///MARK: UI
+    private let containerView: UIView = {
         let view = UIView()
-        view.backgroundColor = .cyan
+        view.backgroundColor = .white
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    let imageView: UIImageView = {
+    private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.backgroundColor = .white
@@ -40,6 +41,13 @@ class StretchyHeader: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func viewDidScrolled(_ scrollView: UIScrollView) {
+        let yOffset = scrollView.contentOffset.y
+        imageViewHeightConstraint?.constant = -yOffset
+    }
+}
+    
+private extension StretchyHeader {
     
     func addViews() {
         addSubview(containerView)
@@ -104,10 +112,5 @@ class StretchyHeader: UIView {
                                                        constant: 0)
         
         imageViewHeightConstraint?.isActive = true
-    }
-    
-    func viewDidScrolled(_ scrollView: UIScrollView) {
-        let yOffset = scrollView.contentOffset.y
-        imageViewHeightConstraint?.constant = -yOffset
     }
 }

@@ -10,7 +10,12 @@ import UIKit
 
 class SentMessageView: UIView {
     
-    let containerView: UIView = {
+    ///MARK: Constants
+    private let sizeRatio: CGFloat = 0.5
+    private let imageName: String = "right_bubble"
+    
+    ///MARK: UI Components
+    private let containerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -37,13 +42,17 @@ class SentMessageView: UIView {
         setImage()
     }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     func setData(text: String) {
         label.text = text
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+}
+
+private extension SentMessageView {
     
     func addViews() {
         addSubview(containerView)
@@ -81,19 +90,22 @@ class SentMessageView: UIView {
         NSLayoutConstraint(item: label, attribute: .bottom, relatedBy: .equal, toItem: containerView, attribute: .bottom, multiplier: 1, constant: -16).isActive = true
     }
     
-    private func setImage() {
-        guard let image = UIImage(named: "right_bubble") else {
+    func setImage() {
+        guard let image = UIImage(named: imageName) else {
             return
         }
-        
         let w = image.size.width
         let h = image.size.height
         
-        let top = 0.5 * h
-        let left = 0.5 * w
+        let top = sizeRatio * h
+        let left = sizeRatio * w
         
         let resizableImage = image.resizableImage(withCapInsets:
-                                                    UIEdgeInsets(top: top, left: left, bottom: top, right: left), resizingMode: .stretch)
+                                                    UIEdgeInsets(top: top,
+                                                                 left: left,
+                                                                 bottom: top,
+                                                                 right: left),
+                                                  resizingMode: .stretch)
         imageView.image = resizableImage
     }
 }

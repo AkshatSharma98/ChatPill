@@ -9,6 +9,7 @@ import Foundation
 
 protocol GetUsersDelegate: AnyObject {
     func didFetchUsers(users: [User]?)
+    func didFailToFetchUsers(message: String?)
 }
 
 class GetUsers {
@@ -24,8 +25,11 @@ class GetUsers {
 }
 
 extension GetUsers: GetUsersRepositoryDelegate {
+    func didFetchUsers(getUserData: GetUsersData?) {
+        self.delegate?.didFetchUsers(users: getUserData?.users)
+    }
     
-    func didFetchUsers(users: [User]?) {
-        self.delegate?.didFetchUsers(users: users)
+    func didFailToFetchUsers(getUserData: GetUsersData?) {
+        self.delegate?.didFailToFetchUsers(message: getUserData?.message)
     }
 }

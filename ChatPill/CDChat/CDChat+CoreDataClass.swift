@@ -9,6 +9,8 @@
 import Foundation
 import CoreData
 
+///Core Data - Chat Model
+///CD Stands For CoreData
 @objc(CDChat)
 public class CDChat: NSManagedObject {
 
