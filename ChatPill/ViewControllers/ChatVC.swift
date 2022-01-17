@@ -49,6 +49,7 @@ class ChatVC: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: false)
         tableView.reloadData()
         scrollToBottom()
     }
@@ -91,7 +92,7 @@ private extension ChatVC {
     
     private func createViews() {
         
-        NSLayoutConstraint(item: tableView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 100).isActive = true
+        NSLayoutConstraint(item: tableView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 44 + Commons.getStatusBarHeight()).isActive = true
         
         NSLayoutConstraint(item: tableView, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1, constant: 12).isActive = true
         

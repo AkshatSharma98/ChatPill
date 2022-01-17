@@ -13,6 +13,7 @@ import UIKit
 class UserChatTVC: UITableViewCell {
     
     private let imgSize: CGSize = CGSize(width: 50, height: 50)
+    private let rightIconSize: CGSize = CGSize(width: 20, height: 20)
     
     let containerView: UIView = {
         let view = UIView()
@@ -46,12 +47,31 @@ class UserChatTVC: UITableViewCell {
         }, completion: nil)
     }
     
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesMoved(touches, with: event)
+    }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+        UIView.animate(withDuration: 0.2, animations: {
+            self.containerView.transform = .identity
+        }, completion: nil)
+    }
+    
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         UIView.animate(withDuration: 0.2, animations: {
             self.containerView.transform = .identity
         }, completion: nil)
     }
+    
+    private let rightIconView: UIImageView = {
+        let view = UIImageView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.image = UIImage(systemName: "chevron.right")
+        view.tintColor = Commons.getColorFromHex(hex: "#D7D7D7")
+        return view
+    }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -81,6 +101,7 @@ private extension UserChatTVC {
         
         containerView.addSubview(imgView)
         containerView.addSubview(titleLabel)
+        containerView.addSubview(rightIconView)
     }
     
     func createViews() {
@@ -104,8 +125,6 @@ private extension UserChatTVC {
         imgView.heightAnchor.constraint(equalToConstant: imgSize.height).isActive = true
         imgView.widthAnchor.constraint(equalToConstant: imgSize.width).isActive = true
 
-
-
         NSLayoutConstraint(item: titleLabel, attribute: .centerY, relatedBy: .equal, toItem: containerView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
 
         NSLayoutConstraint(item: titleLabel, attribute: .leading, relatedBy: .equal, toItem: imgView, attribute: .trailing, multiplier: 1, constant: 12).isActive = true
@@ -114,6 +133,17 @@ private extension UserChatTVC {
 
         NSLayoutConstraint(item: titleLabel, attribute: .bottom, relatedBy: .lessThanOrEqual, toItem: containerView, attribute: .bottom, multiplier: 1, constant: -12).isActive = true
 
-        NSLayoutConstraint(item: titleLabel, attribute: .trailing, relatedBy: .lessThanOrEqual, toItem: containerView, attribute: .trailing, multiplier: 1, constant: -12).isActive = true
+        NSLayoutConstraint(item: titleLabel, attribute: .trailing, relatedBy: .equal, toItem: rightIconView, attribute: .leading, multiplier: 1, constant: -12).isActive = true
+        
+        NSLayoutConstraint(item: rightIconView, attribute: .centerY, relatedBy: .equal, toItem: containerView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+
+        NSLayoutConstraint(item: rightIconView, attribute: .trailing, relatedBy: .equal, toItem: containerView, attribute: .trailing, multiplier: 1, constant: -12).isActive = true
+
+        NSLayoutConstraint(item: rightIconView, attribute: .top, relatedBy: .greaterThanOrEqual, toItem: containerView, attribute: .top, multiplier: 1, constant: 12).isActive = true
+        
+        NSLayoutConstraint(item: rightIconView, attribute: .bottom, relatedBy: .lessThanOrEqual, toItem: containerView, attribute: .bottom, multiplier: 1, constant: -12).isActive = true
+        
+        rightIconView.heightAnchor.constraint(equalToConstant: rightIconSize.height).isActive = true
+        rightIconView.widthAnchor.constraint(equalToConstant: rightIconSize.width).isActive = true
     }
 }
