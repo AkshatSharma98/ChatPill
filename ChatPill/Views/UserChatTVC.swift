@@ -13,7 +13,7 @@ import UIKit
 class UserChatTVC: UITableViewCell {
     
     private let imgSize: CGSize = CGSize(width: 50, height: 50)
-    private let rightIconSize: CGSize = CGSize(width: 20, height: 20)
+    private let rightIconSize: CGSize = CGSize(width: 10, height: 20)
     
     let containerView: UIView = {
         let view = UIView()

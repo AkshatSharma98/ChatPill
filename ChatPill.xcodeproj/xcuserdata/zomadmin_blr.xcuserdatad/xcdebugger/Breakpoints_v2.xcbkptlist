@@ -46,8 +46,8 @@
             filePath = "ChatPill/Views/BottomTextView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "176"
-            endingLineNumber = "176"
+            startingLineNumber = "221"
+            endingLineNumber = "221"
             landmarkName = "createViews()"
             landmarkType = "7">
          </BreakpointContent>
@@ -62,8 +62,8 @@
             filePath = "ChatPill/Views/BottomTextView.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "177"
-            endingLineNumber = "177"
+            startingLineNumber = "222"
+            endingLineNumber = "222"
             landmarkName = "createViews()"
             landmarkType = "7">
          </BreakpointContent>

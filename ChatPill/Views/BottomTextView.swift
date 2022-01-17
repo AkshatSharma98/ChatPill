@@ -27,6 +27,15 @@ class BottomTextView: UIView {
         return view
     }()
     
+    let placeHolderLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.isUserInteractionEnabled = false
+        label.text = " Aa"
+        label.textColor = Commons.getColorFromHex(hex: "#D7D7D7")
+        return label
+    }()
+    
     private let textViewContainer: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.white
@@ -73,6 +82,7 @@ class BottomTextView: UIView {
     
     func setTextViewToNil() {
         textView.text = nil
+        placeHolderLabel.isHidden = false
         textViewHeightConstraint?.constant = minHeight
         self.delegate?.layoutNeeded()
     }
@@ -90,6 +100,7 @@ private extension BottomTextView {
         containerView.addSubview(textViewContainer)
         containerView.addSubview(sendButton)
         textViewContainer.addSubview(textView)
+        textViewContainer.addSubview(placeHolderLabel)
     }
     
     func createContainerView() {
@@ -161,6 +172,40 @@ private extension BottomTextView {
                            attribute: .bottom,
                            multiplier: 1,
                            constant: 0).isActive = true
+        
+        NSLayoutConstraint(item: placeHolderLabel,
+                           attribute: .top,
+                           relatedBy: .equal,
+                           toItem: textView,
+                           attribute: .top,
+                           multiplier: 1,
+                           constant: 0).isActive = true
+        
+        NSLayoutConstraint(item: placeHolderLabel,
+                           attribute: .leading,
+                           relatedBy: .equal,
+                           toItem: textView,
+                           attribute: .leading,
+                           multiplier: 1,
+                           constant: 0).isActive = true
+        
+        
+        NSLayoutConstraint(item: placeHolderLabel,
+                           attribute: .trailing,
+                           relatedBy: .equal,
+                           toItem: textView,
+                           attribute: .trailing,
+                           multiplier: 1,
+                           constant: 0).isActive = true
+        
+        NSLayoutConstraint(item: placeHolderLabel,
+                           attribute: .bottom,
+                           relatedBy: .equal,
+                           toItem: textView,
+                           attribute: .bottom,
+                           multiplier: 1,
+                           constant: 0).isActive = true
+        
         
         textViewHeightConstraint = textView.heightAnchor.constraint(equalToConstant: minHeight)
         textViewHeightConstraint?.isActive = true
@@ -253,6 +298,8 @@ extension BottomTextView: UITextViewDelegate {
     }
     
     func textViewDidChange(_ textView: UITextView) {
+        
+        placeHolderLabel.isHidden = !textView.text.isEmpty
         var height = minHeight
         
         if textView.contentSize.height <= minHeight {
