@@ -262,19 +262,12 @@ extension BottomTextView: UITextViewDelegate {
         } else {
             height = textView.contentSize.height
         }
-        
-        //self.placeHolderLabel.isHidden = !textView.text.isEmpty
+
         textViewHeightConstraint?.constant = height
-        self.delegate?.layoutNeeded()
-        UIView.animate(withDuration: 0.1) { [weak self] in
+        UIView.animate(withDuration: 0.1, animations:  { [weak self] in
             self?.layoutIfNeeded()
+        }) { [weak self] _ in
+            self?.delegate?.layoutNeeded()
         }
     }
-    
-//
-//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//        textField.resignFirstResponder()
-//    }
 }
-
-//Akshat is very good boy, he will make ensure his family gets his complete time and remain very happy, god will help me.

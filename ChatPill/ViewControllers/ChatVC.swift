@@ -78,7 +78,7 @@ class ChatVC: UIViewController {
             let height = bottomTextView.frame.height
             tableView.contentInset.bottom = height
         } else {
-            tableView.contentInset.bottom = bottomTextView.containerView.frame.height + Commons.getNotchHeight()
+            tableView.contentInset.bottom = bottomTextView.containerView.frame.height //+ Commons.getNotchHeight()
         }
     }
 }
@@ -130,7 +130,7 @@ private extension ChatVC {
             let keyboardFrame =  (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as! NSValue).cgRectValue
             let keyboardHeight = keyboardFrame.height
             
-            tableViewBottomConstraint?.constant = -(bottomTextView.containerView.frame.height + keyboardHeight - 3 * Commons.getNotchHeight())
+            tableViewBottomConstraint?.constant = -(keyboardHeight)
             self.bottomTextView.updateHeightConstraint(height: -keyboardHeight)
             UIView.animate(withDuration: 0.2, animations: { [weak self] in
               //
@@ -148,7 +148,9 @@ private extension ChatVC {
         self.bottomTextView.updateHeightConstraint(height: -Commons.getNotchHeight())
         UIView.animate(withDuration: 0.2, animations: { [weak self] in
             self?.view.layoutIfNeeded()
-        }, completion: nil)
+        }, completion:  { [weak self] _ in
+            self?.scrollToBottom(animated: true)
+        })
     }
     
     private func registerForKeyboardNotifications() {
@@ -207,8 +209,8 @@ extension ChatVC: BottomTextViewDelegate {
     func layoutNeeded() {
         UIView.animate(withDuration: 0.2, animations: { [weak self] in
             self?.view.layoutIfNeeded()
-            self?.scrollToBottom()
-        }, completion: nil)
+        }, completion: { [weak self] _ in
+            self?.scrollToBottom()})
     }
     
     func didClickSendButton(text: String) {
