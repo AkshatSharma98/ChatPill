@@ -179,14 +179,7 @@ private extension BottomTextView {
 
 extension BottomTextView: ChatTextViewDelegate {
     
-    func layoutNeeded(_ forClass: ChatTextView) {
-        UIView.animate(withDuration: 0.1) {
-            self.layoutIfNeeded()
-        } completion: { _ in
-            self.delegate?.updateInsetIfNeeded(height: self.containerView.frame.height)
-        }
-
-//        self.layoutIfNeeded()
-//        self.delegate?.layoutNeeded()
+    func heightChanged(_ forClass: ChatTextView) {
+        self.delegate?.updateInsetIfNeeded(height: self.containerView.frame.height)
     }
 }

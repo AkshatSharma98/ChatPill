@@ -212,9 +212,11 @@ extension ChatVC: ChatVMDelegate {
 ///MARK: BottomTextViewDelegate
 extension ChatVC: BottomTextViewDelegate {
     func updateInsetIfNeeded(height: CGFloat) {
-        print("###", height)
-        tableView.contentInset.bottom = height
-        scrollToBottom()
+        UIView.animate(withDuration: 0.14) { [weak self] in
+            self?.tableView.contentInset.bottom = height
+        } completion: { [weak self] _ in
+            self?.scrollToBottom()
+        }
     }
     
     func didClickSendButton(text: String) {

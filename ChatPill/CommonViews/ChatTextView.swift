@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 protocol ChatTextViewDelegate: AnyObject {
-    func layoutNeeded(_ forClass: ChatTextView)
+    func heightChanged(_ forClass: ChatTextView)
 }
 
 class ChatTextView: UIView {
@@ -63,7 +63,7 @@ class ChatTextView: UIView {
         textView.text = nil
         placeHolderLabel.isHidden = false
         textViewHeightConstraint?.constant = minHeight
-        self.delegate?.layoutNeeded(self)
+        sendHeightUpdate()
     }
 }
 
@@ -185,6 +185,17 @@ private extension ChatTextView {
                            multiplier: 1,
                            constant: 0).isActive = true
     }
+    
+    private func sendHeightUpdate() {
+        UIView.animate(withDuration: 0.2) { [weak self] in
+            self?.layoutIfNeeded()
+        } completion: { [weak self] _ in
+            guard let weakSelf = self else {
+                return
+            }
+            weakSelf.delegate?.heightChanged(weakSelf)
+        }
+    }
 }
 
 extension ChatTextView: UITextViewDelegate {
@@ -219,13 +230,6 @@ extension ChatTextView: UITextViewDelegate {
         }
 
         textViewHeightConstraint?.constant = height
-        UIView.animate(withDuration: 0.1) { [weak self] in
-            self?.layoutIfNeeded()
-        } completion: { [weak self] _ in
-            guard let weakSelf = self else {
-                return
-            }
-            weakSelf.delegate?.layoutNeeded(weakSelf)
-        }
+        sendHeightUpdate()
     }
 }
