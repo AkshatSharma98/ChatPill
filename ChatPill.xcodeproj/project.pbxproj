@@ -15,7 +15,7 @@
 		31748C20279434FD000B284E /* CDChat+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31748C1E279434FD000B284E /* CDChat+CoreDataClass.swift */; };
 		31748C21279434FD000B284E /* CDChat+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31748C1F279434FD000B284E /* CDChat+CoreDataProperties.swift */; };
 		31748C2327943560000B284E /* CDChatRepo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31748C2227943560000B284E /* CDChatRepo.swift */; };
-		31748C2527945E01000B284E /* ChatManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31748C2427945E01000B284E /* ChatManagerProtocol.swift */; };
+		31748C2527945E01000B284E /* ChatManager+Protocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31748C2427945E01000B284E /* ChatManager+Protocol.swift */; };
 		31748C2727947BB7000B284E /* StretchyHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31748C2627947BB7000B284E /* StretchyHeader.swift */; };
 		31B700CC2792CD4700C5C253 /* GithubApiManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B700CB2792CD4700C5C253 /* GithubApiManager.swift */; };
 		31B700CE2792CEE100C5C253 /* UsersDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31B700CD2792CEE100C5C253 /* UsersDTO.swift */; };
@@ -41,6 +41,7 @@
 		31DCF9362791E7900058A768 /* BottomTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DCF9352791E7900058A768 /* BottomTextView.swift */; };
 		31DCF9392791E9E30058A768 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DCF9382791E9E30058A768 /* Constants.swift */; };
 		31DCF93B2792103F0058A768 /* SentMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31DCF93A2792103F0058A768 /* SentMessageView.swift */; };
+		31EB7D9327973A36009A6E35 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31EB7D9227973A36009A6E35 /* MessageView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -52,7 +53,7 @@
 		31748C1E279434FD000B284E /* CDChat+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CDChat+CoreDataClass.swift"; path = "ChatPill/CDChat/CDChat+CoreDataClass.swift"; sourceTree = SOURCE_ROOT; };
 		31748C1F279434FD000B284E /* CDChat+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CDChat+CoreDataProperties.swift"; path = "ChatPill/CDChat/CDChat+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		31748C2227943560000B284E /* CDChatRepo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CDChatRepo.swift; sourceTree = "<group>"; };
-		31748C2427945E01000B284E /* ChatManagerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatManagerProtocol.swift; sourceTree = "<group>"; };
+		31748C2427945E01000B284E /* ChatManager+Protocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatManager+Protocol.swift"; sourceTree = "<group>"; };
 		31748C2627947BB7000B284E /* StretchyHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StretchyHeader.swift; sourceTree = "<group>"; };
 		31B700CB2792CD4700C5C253 /* GithubApiManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GithubApiManager.swift; sourceTree = "<group>"; };
 		31B700CD2792CEE100C5C253 /* UsersDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UsersDTO.swift; sourceTree = "<group>"; };
@@ -80,6 +81,7 @@
 		31DCF9352791E7900058A768 /* BottomTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomTextView.swift; sourceTree = "<group>"; };
 		31DCF9382791E9E30058A768 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		31DCF93A2792103F0058A768 /* SentMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentMessageView.swift; sourceTree = "<group>"; };
+		31EB7D9227973A36009A6E35 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,7 +184,7 @@
 			isa = PBXGroup;
 			children = (
 				31B700DF2792D9E400C5C253 /* GetUsersRepository.swift */,
-				31748C2427945E01000B284E /* ChatManagerProtocol.swift */,
+				31748C2427945E01000B284E /* ChatManager+Protocol.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -228,11 +230,10 @@
 		31DCF9342791E77B0058A768 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				31EB7D9827973DCF009A6E35 /* TVC */,
 				31DCF93A2792103F0058A768 /* SentMessageView.swift */,
-				31B700D22792D14200C5C253 /* UserChatTVC.swift */,
-				31B701242793201700C5C253 /* SentMessageTVC.swift */,
 				31B70126279323FC00C5C253 /* ReceivedMessageView.swift */,
-				31B701282793246700C5C253 /* ReceivedMessageTVC.swift */,
+				31EB7D9227973A36009A6E35 /* MessageView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -245,6 +246,16 @@
 				31562B072795CA280068604B /* Commons.swift */,
 			);
 			path = Commons;
+			sourceTree = "<group>";
+		};
+		31EB7D9827973DCF009A6E35 /* TVC */ = {
+			isa = PBXGroup;
+			children = (
+				31B701242793201700C5C253 /* SentMessageTVC.swift */,
+				31B700D22792D14200C5C253 /* UserChatTVC.swift */,
+				31B701282793246700C5C253 /* ReceivedMessageTVC.swift */,
+			);
+			path = TVC;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -323,7 +334,7 @@
 				31B701292793246700C5C253 /* ReceivedMessageTVC.swift in Sources */,
 				31DCF93B2792103F0058A768 /* SentMessageView.swift in Sources */,
 				31DCF9392791E9E30058A768 /* Constants.swift in Sources */,
-				31748C2527945E01000B284E /* ChatManagerProtocol.swift in Sources */,
+				31748C2527945E01000B284E /* ChatManager+Protocol.swift in Sources */,
 				31748C21279434FD000B284E /* CDChat+CoreDataProperties.swift in Sources */,
 				31B700D12792D12500C5C253 /* HomePageVC.swift in Sources */,
 				31748C2327943560000B284E /* CDChatRepo.swift in Sources */,
@@ -337,6 +348,7 @@
 				31B701252793201700C5C253 /* SentMessageTVC.swift in Sources */,
 				31B700E22792DB6800C5C253 /* User.swift in Sources */,
 				31B700D52792D40E00C5C253 /* UIImageView+Extension.swift in Sources */,
+				31EB7D9327973A36009A6E35 /* MessageView.swift in Sources */,
 				31B700DD2792D88F00C5C253 /* GetUsers.swift in Sources */,
 				31B700CC2792CD4700C5C253 /* GithubApiManager.swift in Sources */,
 				31562B0C2795DC2F0068604B /* ChatTextView.swift in Sources */,
@@ -478,7 +490,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QWL9T65UY3;
 				INFOPLIST_FILE = ChatPill/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -498,7 +510,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QWL9T65UY3;
 				INFOPLIST_FILE = ChatPill/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

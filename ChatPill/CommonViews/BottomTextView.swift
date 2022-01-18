@@ -35,7 +35,8 @@ final class BottomTextView: UIView {
     private let sendButton: UIButton = {
         let button = UIButton(type: .custom)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitleColor(Commons.getColorFromHex(hex: "#347aeb"), for: .normal)
+        button.setTitleColor(Commons.getColorFromHex(hex: "#347AEB"), for: .normal)
+        button.setTitle("Send", for: .normal)
         return button
     }()
     
@@ -43,7 +44,7 @@ final class BottomTextView: UIView {
         super.init(frame: .zero)
         self.delegate = delegate
         createViews()
-        self.backgroundColor = Commons.getColorFromHex(hex: "#D7D7D7")
+        backgroundColor = Commons.getColorFromHex(hex: "#D7D7D7")
     }
     
     required init?(coder: NSCoder) {
@@ -52,14 +53,6 @@ final class BottomTextView: UIView {
     
     func updateHeightConstraint(newValue: CGFloat) {
         bottomConstraint?.constant = newValue
-    }
-    
-    @objc func didClickSend() {
-        let text = textViewContainer.getText()
-        guard let textUnwrapped = text, !textUnwrapped.isEmpty else {
-            return
-        }
-        self.delegate?.didClickSendButton(self, text: textUnwrapped)
     }
     
     func setTextViewToNil() {
@@ -71,8 +64,15 @@ private extension BottomTextView {
     
     func setupViews() {
         sendButton.addTarget(self, action: #selector(didClickSend), for: .touchUpInside)
-        sendButton.setTitle("Send", for: .normal)
         textViewContainer.delegate = self
+    }
+    
+    @objc func didClickSend() {
+        let text = textViewContainer.getText()
+        guard let textUnwrapped = text, !textUnwrapped.isEmpty else {
+            return
+        }
+        self.delegate?.didClickSendButton(self, text: textUnwrapped)
     }
     
     func addViews() {
@@ -180,6 +180,6 @@ private extension BottomTextView {
 extension BottomTextView: ChatTextViewDelegate {
     
     func heightChanged(_ forClass: ChatTextView) {
-        self.delegate?.updateInsetIfNeeded(self, height: self.containerView.frame.height)
+        self.delegate?.updateInsetIfNeeded(self, height: containerView.frame.height)
     }
 }

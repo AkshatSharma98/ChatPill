@@ -8,7 +8,6 @@
 import Foundation
 
 final class ChatModel {
-    
     let imgURL: String?
     let title: String?
     

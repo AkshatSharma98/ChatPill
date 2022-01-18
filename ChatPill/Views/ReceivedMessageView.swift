@@ -8,52 +8,18 @@
 import Foundation
 import UIKit
 
-final class ReceivedMessageView: UIView {
+final class ReceivedMessageView: MessageView {
     
-    let containerView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    private let imageView: UIImageView = {
-        let view = UIImageView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
-    }()
-    
-    private let label : UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.numberOfLines = 0
-        label.textColor = UIColor.white
-        return label
-    }()
-    
-    func setData(text: String) {
-        label.text = text
-    }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        addViews()
-        createViews()
-        setImage()
+    init() {
+        super.init(imageName: "left_bubble")
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func addViews() {
-        addSubview(containerView)
-        
-        containerView.addSubview(imageView)
-        containerView.addSubview(label)
-    }
-    
-    func createViews() {
-        
+    override func createViews() {
+        //containerview
         NSLayoutConstraint(item: containerView, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1, constant: 0).isActive = true
         
         NSLayoutConstraint(item: containerView, attribute: .trailing, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1, constant: 0).isActive = true
@@ -62,7 +28,7 @@ final class ReceivedMessageView: UIView {
         
         NSLayoutConstraint(item: containerView, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
         
-        
+        //imageview
         NSLayoutConstraint(item: imageView, attribute: .leading, relatedBy: .equal, toItem: containerView, attribute: .leading, multiplier: 1, constant: 0).isActive = true
         
         NSLayoutConstraint(item: imageView, attribute: .trailing, relatedBy: .equal, toItem: containerView, attribute: .trailing, multiplier: 1, constant: 0).isActive = true
@@ -79,21 +45,5 @@ final class ReceivedMessageView: UIView {
         NSLayoutConstraint(item: label, attribute: .top, relatedBy: .equal, toItem: containerView, attribute: .top, multiplier: 1, constant: 12).isActive = true
         
         NSLayoutConstraint(item: label, attribute: .bottom, relatedBy: .equal, toItem: containerView, attribute: .bottom, multiplier: 1, constant: -16).isActive = true
-    }
-    
-    private func setImage() {
-        guard let image = UIImage(named: "left_bubble") else {
-            return
-        }
-        
-        let w = image.size.width
-        let h = image.size.height
-        
-        let top = 0.5 * h
-        let left = 0.5 * w
-        
-        let resizableImage = image.resizableImage(withCapInsets:
-                                                    UIEdgeInsets(top: top, left: left, bottom: top, right: left), resizingMode: .stretch)
-        imageView.image = resizableImage
     }
 }

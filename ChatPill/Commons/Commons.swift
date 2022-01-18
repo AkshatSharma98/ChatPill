@@ -10,7 +10,7 @@ import UIKit
 
 final class Commons {
     
-    static func getTopVC(controller: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
+    static func getTopVC(controller: UIViewController? = Commons.keyWindow?.rootViewController) -> UIViewController? {
         if let navigationController = controller as? UINavigationController {
             return getTopVC(controller: navigationController.visibleViewController)
         }
@@ -32,7 +32,7 @@ final class Commons {
     static func getStatusBarHeight() -> CGFloat {
         var statusBarHeight: CGFloat = 0
         if #available(iOS 13.0, *) {
-            let window = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+            let window = Commons.keyWindow
             statusBarHeight = window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
         } else {
             statusBarHeight = UIApplication.shared.statusBarFrame.height
@@ -49,17 +49,17 @@ final class Commons {
     }
     
     static func getColorFromHex(hex: String) -> UIColor {
-        var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
+        var cString: String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
         
-        if (cString.hasPrefix("#")) {
+        if cString.hasPrefix("#") {
             cString.remove(at: cString.startIndex)
         }
         
-        if ((cString.count) != 6) {
+        if cString.count != 6 {
             return UIColor.gray
         }
         
-        var rgbValue:UInt64 = 0
+        var rgbValue: UInt64 = 0
         Scanner(string: cString).scanHexInt64(&rgbValue)
         
         return UIColor(
@@ -68,5 +68,13 @@ final class Commons {
             blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
             alpha: CGFloat(1.0)
         )
+    }
+    
+    private static var keyWindow: UIWindow? {
+        return UIApplication.shared.connectedScenes
+               .filter { $0.activationState == .foregroundActive }
+               .first(where: { $0 is UIWindowScene })
+               .flatMap({ $0 as? UIWindowScene })?.windows
+               .first(where: \.isKeyWindow)
     }
 }

@@ -102,6 +102,7 @@ private extension LoaderView {
     }
     
     func createViews() {
+        //containerview
         NSLayoutConstraint(item: containerView, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: containerView, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
         
@@ -109,10 +110,12 @@ private extension LoaderView {
         
         NSLayoutConstraint(item: containerView, attribute: .trailing, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1, constant: 0).isActive = true
         
+        //loader
         NSLayoutConstraint(item: loader, attribute: .centerX, relatedBy: .equal, toItem: containerView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
         
         NSLayoutConstraint(item: loader, attribute: .centerY, relatedBy: .equal, toItem: containerView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         
+        //message label
         NSLayoutConstraint(item: messageLabel, attribute: .centerX, relatedBy: .equal, toItem: containerView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
         
         NSLayoutConstraint(item: messageLabel, attribute: .bottom, relatedBy: .equal, toItem: loader, attribute: .top, multiplier: 1, constant: -12).isActive = true
@@ -121,6 +124,7 @@ private extension LoaderView {
         
         NSLayoutConstraint(item: messageLabel, attribute: .trailing, relatedBy: .equal, toItem: containerView, attribute: .trailing, multiplier: 1, constant: -12).isActive = true
         
+        //retry button
         NSLayoutConstraint(item: retryButton, attribute: .centerX, relatedBy: .equal, toItem: containerView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
         
         NSLayoutConstraint(item: retryButton, attribute: .top, relatedBy: .equal, toItem: loader, attribute: .bottom, multiplier: 1, constant: 12).isActive = true

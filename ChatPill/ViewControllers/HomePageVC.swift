@@ -12,6 +12,7 @@ final class HomePageVC: UIViewController {
     
     ///MARK: ViewModel
     private var vm: HomePageVM?
+    private let stretchyHeaderHeight: CGFloat = 300
     
     ///MARK: UI Components
     private let loaderView: LoaderView = {
@@ -32,11 +33,7 @@ final class HomePageVC: UIViewController {
         tableView.delaysContentTouches = false
         tableView.separatorStyle = .none
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedSectionHeaderHeight = 0
-        tableView.sectionHeaderHeight = 0
-        tableView.estimatedRowHeight = 44
         tableView.contentInsetAdjustmentBehavior = .never
-        tableView.keyboardDismissMode = .onDrag
         tableView.showsVerticalScrollIndicator = false
         tableView.contentInset.bottom = Commons.getNotchHeight()
         return tableView
@@ -72,6 +69,7 @@ private extension HomePageVC {
     }
     
     func createViews() {
+        //headerview
         NSLayoutConstraint(item: headerView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 0).isActive = true
         
         NSLayoutConstraint(item: headerView, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1, constant: 0).isActive = true
@@ -80,6 +78,7 @@ private extension HomePageVC {
         
         headerView.heightAnchor.constraint(equalToConstant: 44).isActive = true
         
+        //tableview
         NSLayoutConstraint(item: tableView, attribute: .top, relatedBy: .equal, toItem: headerView, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
         
         NSLayoutConstraint(item: tableView, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
@@ -88,6 +87,7 @@ private extension HomePageVC {
         
         NSLayoutConstraint(item: tableView, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1, constant: 0).isActive = true
         
+        //loaderview
         NSLayoutConstraint(item: loaderView, attribute: .top, relatedBy: .equal, toItem: headerView, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
         
         NSLayoutConstraint(item: loaderView, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
@@ -97,18 +97,10 @@ private extension HomePageVC {
         NSLayoutConstraint(item: loaderView, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1, constant: 0).isActive = true
         
         tableView.tableHeaderView = StretchyHeader()
-        tableView.tableHeaderView?.frame = CGRect(x: 0, y: 0, width: 0, height: 300)
-    }
-    
-    func hideLoaderView() {
-        loaderView.isHidden = true
-        loaderView.stopLoader()
-    }
-    
-    func showLoader(message: String? = nil) {
-        view.bringSubviewToFront(loaderView)
-        loaderView.isHidden = false
-        loaderView.startLoader()
+        tableView.tableHeaderView?.frame = CGRect(x: 0,
+                                                  y: 0,
+                                                  width: 0,
+                                                  height: stretchyHeaderHeight)
     }
     
     func setupTableView() {
@@ -120,6 +112,17 @@ private extension HomePageVC {
     func registerCells() {
         tableView.register(UserChatTVC.self,
                            forCellReuseIdentifier: UserChatTVC.self.description())
+    }
+    
+    func hideLoaderView() {
+        loaderView.isHidden = true
+        loaderView.stopLoader()
+    }
+    
+    func showLoader(message: String? = nil) {
+        view.bringSubviewToFront(loaderView)
+        loaderView.isHidden = false
+        loaderView.startLoader(message: message)
     }
 }
 
@@ -167,6 +170,7 @@ extension HomePageVC: UITableViewDelegate {
 
 ///MARK: HomePageVMDelegate
 extension HomePageVC: HomePageVMDelegate {
+    
     func didFetchUsers(_ forClass: HomePageVM) {
         hideLoaderView()
         tableView.reloadData()

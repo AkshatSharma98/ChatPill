@@ -8,7 +8,7 @@
 import Foundation
 
 protocol ChatVMDelegate: AnyObject {
-    func updateView()
+    func loadNewChat(_ forClass: ChatVM)
 }
 
 final class ChatVM {
@@ -31,29 +31,6 @@ final class ChatVM {
                                               type: chatMessage.type ?? .received))
         })
     }
-     
-    func insert(text: String?, type: ChatType) {
-        let chatModel = ChatMessageModel(text: text, type: type)
-        messages?.append(chatModel)
-        saveInLocal(text: text, type: type)
-        self.delegate?.updateView()
-    }
-    
-    func saveInLocal(text: String?, type: ChatType) {
-        chatManager.saveChatMessage(for: id,
-                                    name: name,
-                                    chatMessage: ChatMessage(message: text, type: type))
-    }
-    
-    func Chat(message: String?) {
-        let chatModel = ChatMessageModel(text: message, type: .received)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
-            self?.messages?.append(chatModel)
-            self?.saveInLocal(text: message, type: .received)
-            self?.delegate?.updateView()
-        }
-    }
     
     func numberOfRows() -> Int {
         return messages?.count ?? 0
@@ -73,5 +50,34 @@ final class ChatVM {
         }
         insert(text: message, type: .sent)
         Chat(message: message + " " + message)
+    }
+}
+
+private extension ChatVM {
+    
+    func insert(text: String?, type: ChatType) {
+        let chatModel = ChatMessageModel(text: text, type: type)
+        messages?.append(chatModel)
+        saveInLocal(text: text, type: type)
+        self.delegate?.loadNewChat(self)
+    }
+    
+    func saveInLocal(text: String?, type: ChatType) {
+        chatManager.saveChatMessage(for: id,
+                                    name: name,
+                                    chatMessage: ChatMessage(message: text, type: type))
+    }
+    
+    func Chat(message: String?) {
+        let chatModel = ChatMessageModel(text: message, type: .received)
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
+            guard let weakSelf = self else {
+                return
+            }
+            weakSelf.messages?.append(chatModel)
+            weakSelf.saveInLocal(text: message, type: .received)
+            weakSelf.delegate?.loadNewChat(weakSelf)
+        }
     }
 }

@@ -19,7 +19,7 @@ final class UserChatTVC: UITableViewCell {
     private let touchUpDuration = 0.2
     
     ///MARK: UI Components
-    let containerView: UIView = {
+    private let containerView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.borderWidth = 0.2
@@ -27,7 +27,7 @@ final class UserChatTVC: UITableViewCell {
         return view
     }()
     
-    let imgView: UIImageView = {
+    private let imgView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = 4
@@ -35,10 +35,18 @@ final class UserChatTVC: UITableViewCell {
         return imageView
     }()
     
-    let titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+    
+    private let rightIconView: UIImageView = {
+        let view = UIImageView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.image = UIImage(systemName: "chevron.right")
+        view.tintColor = Commons.getColorFromHex(hex: "#D7D7D7")
+        return view
     }()
     
     override func prepareForReuse() {
@@ -72,14 +80,6 @@ final class UserChatTVC: UITableViewCell {
             self?.containerView.transform = .identity
         }, completion: nil)
     }
-    
-    private let rightIconView: UIImageView = {
-        let view = UIImageView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.image = UIImage(systemName: "chevron.right")
-        view.tintColor = Commons.getColorFromHex(hex: "#D7D7D7")
-        return view
-    }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

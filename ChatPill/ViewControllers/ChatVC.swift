@@ -24,9 +24,6 @@ final class ChatVC: UIViewController {
         tableView.delaysContentTouches = false
         tableView.separatorStyle = .none
         tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedSectionHeaderHeight = 0
-        tableView.sectionHeaderHeight = 0
-        tableView.estimatedRowHeight = 44
         tableView.contentInsetAdjustmentBehavior = .never
         tableView.keyboardDismissMode = .onDrag
         tableView.showsVerticalScrollIndicator = false
@@ -81,7 +78,7 @@ private extension ChatVC {
     }
     
     private func createViews() {
-        
+        //tableView
         NSLayoutConstraint(item: tableView, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 44 + Commons.getStatusBarHeight()).isActive = true
         
         NSLayoutConstraint(item: tableView, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1, constant: 12).isActive = true
@@ -92,6 +89,7 @@ private extension ChatVC {
         
         tableViewBottomConstraint?.isActive = true
         
+        //bottomTextView
         NSLayoutConstraint(item: bottomTextView, attribute: .bottom, relatedBy: .equal, toItem: view, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
         
         NSLayoutConstraint(item: bottomTextView, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1, constant: 0).isActive = true
@@ -128,7 +126,8 @@ private extension ChatVC {
     @objc func keyboardWillShowNotification(_ notification: NSNotification) {
         isKeyboardVisible = true
         if let userInfo = notification.userInfo {
-            guard let keyboardFrame =  (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
+            guard let keyboardFrame =  (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+            else {
                 return
             }
             let keyboardHeight = keyboardFrame.height
@@ -201,7 +200,8 @@ extension ChatVC: UITableViewDataSource {
 
 ///MARK: ChatVMDelegate
 extension ChatVC: ChatVMDelegate {
-    func updateView() {
+    
+    func loadNewChat(_ forClass: ChatVM) {
         tableView.reloadData()
         scrollToBottom()
     }
@@ -223,7 +223,6 @@ extension ChatVC: BottomTextViewDelegate {
         }
     }
 }
-
 
 ///MARK: UITableViewDelegate
 extension ChatVC: UITableViewDelegate {

@@ -69,6 +69,12 @@ final class ChatTextView: UIView {
 
 private extension ChatTextView {
     
+    func addViews() {
+        addSubview(containerView)
+        containerView.addSubview(textView)
+        containerView.addSubview(placeHolderLabel)
+    }
+    
     func createViews() {
         addViews()
         createContainerView()
@@ -144,12 +150,6 @@ private extension ChatTextView {
         
         containerView.layer.cornerRadius = 15
         textView.delegate = self
-    }
-    
-    func addViews() {
-        addSubview(containerView)
-        containerView.addSubview(textView)
-        containerView.addSubview(placeHolderLabel)
     }
     
     func createContainerView() {
