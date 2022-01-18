@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class SentMessageTVC: UITableViewCell {
+final class SentMessageTVC: UITableViewCell {
     
     private let containerView: UIView = {
         let view = UIView()

@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class Commons {
+final class Commons {
     
     static func getTopVC(controller: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
         if let navigationController = controller as? UINavigationController {

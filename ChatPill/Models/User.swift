@@ -7,7 +7,7 @@
 
 import Foundation
 
-class User {
+final class User {
     let name: String?
     let imgUrl: String?
     

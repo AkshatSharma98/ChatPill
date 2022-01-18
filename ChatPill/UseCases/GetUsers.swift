@@ -8,11 +8,11 @@
 import Foundation
 
 protocol GetUsersDelegate: AnyObject {
-    func didFetchUsers(users: [User]?)
-    func didFailToFetchUsers(message: String?)
+    func didFetchUsers(_ forClass: GetUsers, users: [User]?)
+    func didFailToFetchUsers(_ forClass: GetUsers, message: String?)
 }
 
-class GetUsers {
+final class GetUsers {
     
     private weak var delegate: GetUsersDelegate?
     private var getUsersRepo: GetUsersRepository?
@@ -25,11 +25,12 @@ class GetUsers {
 }
 
 extension GetUsers: GetUsersRepositoryDelegate {
-    func didFetchUsers(getUserData: GetUsersData?) {
-        self.delegate?.didFetchUsers(users: getUserData?.users)
+    
+    func didFetchUsers(_ forClass: GetUsersRepository, getUserData: GetUsersData?) {
+        self.delegate?.didFetchUsers(self, users: getUserData?.users)
     }
     
-    func didFailToFetchUsers(getUserData: GetUsersData?) {
-        self.delegate?.didFailToFetchUsers(message: getUserData?.message)
+    func didFailToFetchUsers(_ forClass: GetUsersRepository, getUserData: GetUsersData?) {
+        self.delegate?.didFailToFetchUsers(self, message: getUserData?.message)
     }
 }

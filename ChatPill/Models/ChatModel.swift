@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ChatModel {
+final class ChatModel {
     
     let imgURL: String?
     let title: String?

@@ -8,11 +8,11 @@
 import Foundation
 
 protocol GithubApiManagerDelegate: AnyObject {
-    func didFetchUsers(response: GetUsersResponse?)
-    func didFailToFetch(response: GetUsersResponse?)
+    func didFetchUsers(_ forClass: GithubApiManager, response: GetUsersResponse?)
+    func didFailToFetch(_ forClass: GithubApiManager, response: GetUsersResponse?)
 }
 
-class GetUsersResponse: ResponseModel {
+final class GetUsersResponse: ResponseModel {
     let message: String?
     let users: [UsersDTO]?
     let statusCode: Int?
@@ -24,13 +24,14 @@ class GetUsersResponse: ResponseModel {
     }
 }
 
-class GithubApiManager {
+final class GithubApiManager {
     
+    ///MARK: Constants
     private let baseUrl = "https://api.github.com/"
     private let getUsersEndPoint = "users"
     
+    ///MARK: Private Vars
     private weak var delegate: GithubApiManagerDelegate?
-    
     private let sessionManager = URLSession(configuration: .default)
     
     init(with delegate: GithubApiManagerDelegate?) {
@@ -42,7 +43,8 @@ class GithubApiManager {
         let userApiEndPoint = baseUrl + getUsersEndPoint
         
         guard let url = URL(string: userApiEndPoint) else {
-            self.delegate?.didFailToFetch(response: GetUsersResponse(message: "Not a valid Api URL",
+            self.delegate?.didFailToFetch(self,
+                                          response: GetUsersResponse(message: "Not a valid Api URL",
                                                                      users: nil,
                                                                      statusCode: nil))
             return
@@ -91,18 +93,26 @@ private extension GithubApiManager {
     }
     
     func didFetchData(message: String?, statusCode: Int?, users: [UsersDTO]?) {
-        DispatchQueue.main.async {
-            self.delegate?.didFetchUsers(response: GetUsersResponse(message: message,
-                                                                    users: users,
-                                                                    statusCode: statusCode))
+        DispatchQueue.main.async { [weak self] in
+            guard let weakSelf = self else {
+                return
+            }
+            weakSelf.delegate?.didFetchUsers(weakSelf,
+                                             response: GetUsersResponse(message: message,
+                                                                        users: users,
+                                                                        statusCode: statusCode))
         }
     }
     
     func didFailToFetchData(message: String?, statusCode: Int?, users: [UsersDTO]?) {
-        DispatchQueue.main.async {
-            self.delegate?.didFailToFetch(response: GetUsersResponse(message: message,
-                                                                     users: users,
-                                                                     statusCode: statusCode))
+        DispatchQueue.main.async { [weak self] in
+            guard let weakSelf = self else {
+                return
+            }
+            weakSelf.delegate?.didFailToFetch(weakSelf,
+                                              response: GetUsersResponse(message: message,
+                                                                         users: users,
+                                                                         statusCode: statusCode))
         }
     }
 }

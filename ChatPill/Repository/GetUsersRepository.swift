@@ -8,11 +8,11 @@
 import Foundation
 
 protocol GetUsersRepositoryDelegate: AnyObject {
-    func didFetchUsers(getUserData: GetUsersData?)
-    func didFailToFetchUsers(getUserData: GetUsersData?)
+    func didFetchUsers(_ forClass: GetUsersRepository, getUserData: GetUsersData?)
+    func didFailToFetchUsers(_ forClass: GetUsersRepository, getUserData: GetUsersData?)
 }
 
-class GetUsersData: ResponseModel {
+final class GetUsersData: ResponseModel {
     let statusCode: Int?
     let message: String?
     let users: [User]?
@@ -24,7 +24,7 @@ class GetUsersData: ResponseModel {
     }
 }
 
-class GetUsersRepository {
+final class GetUsersRepository {
    
     lazy var apiManager: GithubApiManager = GithubApiManager(with: self)
     private weak var delegate: GetUsersRepositoryDelegate?
@@ -39,19 +39,17 @@ class GetUsersRepository {
 }
 
 extension GetUsersRepository: GithubApiManagerDelegate {
-    func didFetchUsers(response: GetUsersResponse?) {
+    func didFetchUsers(_ forClass: GithubApiManager, response: GetUsersResponse?) {
         if response?.statusCode != Constants.successStatusCode {
-            didFailToFetch(response: response)
+            handleFailure(response: response)
         }
-        self.delegate?.didFetchUsers(getUserData: GetUsersData(statusCode: response?.statusCode,
+        self.delegate?.didFetchUsers(self, getUserData: GetUsersData(statusCode: response?.statusCode,
                                                                message: response?.message,
                                                                users: getUsersArray(from: response?.users)))
     }
     
-    func didFailToFetch(response: GetUsersResponse?) {
-        self.delegate?.didFailToFetchUsers(getUserData: GetUsersData(statusCode: response?.statusCode,
-                                                                     message: response?.message,
-                                                                     users: getUsersArray(from: response?.users)))
+    func didFailToFetch(_ forClass: GithubApiManager, response: GetUsersResponse?) {
+        handleFailure(response: response)
     }
 }
 
@@ -67,5 +65,11 @@ private extension GetUsersRepository {
             usersLocal.append(user)
         })
         return usersLocal
+    }
+    
+    func handleFailure(response: GetUsersResponse?) {
+        self.delegate?.didFailToFetchUsers(self, getUserData: GetUsersData(statusCode: response?.statusCode,
+                                                                     message: response?.message,
+                                                                     users: getUsersArray(from: response?.users)))
     }
 }

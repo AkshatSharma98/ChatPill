@@ -9,11 +9,11 @@ import Foundation
 import UIKit
 
 protocol BottomTextViewDelegate: AnyObject {
-    func didClickSendButton(text: String)
-    func updateInsetIfNeeded(height: CGFloat)
+    func didClickSendButton(_ forClass: BottomTextView, text: String)
+    func updateInsetIfNeeded(_ forClass: BottomTextView, height: CGFloat)
 }
 
-class BottomTextView: UIView {
+final class BottomTextView: UIView {
     
     ///MARK: Private Vars + Constants
     private weak var delegate: BottomTextViewDelegate?
@@ -59,7 +59,7 @@ class BottomTextView: UIView {
         guard let textUnwrapped = text, !textUnwrapped.isEmpty else {
             return
         }
-        self.delegate?.didClickSendButton(text: textUnwrapped)
+        self.delegate?.didClickSendButton(self, text: textUnwrapped)
     }
     
     func setTextViewToNil() {
@@ -180,6 +180,6 @@ private extension BottomTextView {
 extension BottomTextView: ChatTextViewDelegate {
     
     func heightChanged(_ forClass: ChatTextView) {
-        self.delegate?.updateInsetIfNeeded(height: self.containerView.frame.height)
+        self.delegate?.updateInsetIfNeeded(self, height: self.containerView.frame.height)
     }
 }

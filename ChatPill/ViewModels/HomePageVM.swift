@@ -8,10 +8,11 @@
 import Foundation
 
 protocol HomePageVMDelegate: AnyObject {
-    func didFetchUsers()
+    func didFetchUsers(_ forClass: HomePageVM)
+    func didFailToFetch(_ forClass: HomePageVM, message: String?)
 }
 
-class HomePageVM {
+final class HomePageVM {
     
     private var getUser: GetUsers?
     private weak var delegate: HomePageVMDelegate?
@@ -21,8 +22,12 @@ class HomePageVM {
         self.delegate = delegate
     }
     
-    func getUsers() {
-        getUser = GetUsers(delegate: self)
+    func vmDidLoad() {
+        getUsers()
+    }
+    
+    func getData() {
+        getUsers()
     }
     
     func numberOfSection() -> Int {
@@ -37,17 +42,21 @@ class HomePageVM {
         return ChatModel(imgURL: users?[indexPath.row].imgUrl,
                          title: users?[indexPath.row].name)
     }
+    
+    private func getUsers() {
+        getUser = GetUsers(delegate: self)
+    }
 }
 
 ///MARK: GetUsersDelegate
 extension HomePageVM: GetUsersDelegate {
     
-    func didFailToFetchUsers(message: String?) {
-        
+    func didFetchUsers(_ forClass: GetUsers, users: [User]?) {
+        self.users = users
+        self.delegate?.didFetchUsers(self)
     }
     
-    func didFetchUsers(users: [User]?) {
-        self.users = users
-        self.delegate?.didFetchUsers()
+    func didFailToFetchUsers(_ forClass: GetUsers, message: String?) {
+        self.delegate?.didFailToFetch(self, message: message)
     }
 }

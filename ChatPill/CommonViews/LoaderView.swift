@@ -8,8 +8,12 @@
 import Foundation
 import UIKit
 
+protocol LoaderViewDelegate: AnyObject {
+    func didClickRetryButton(_ forClass: LoaderView)
+}
+
 final class LoaderView: UIView {
-    
+
     ///MARK: UI Components
     private let containerView: UIView = {
         let view = UIView()
@@ -33,10 +37,23 @@ final class LoaderView: UIView {
         return view
     }()
     
+    private let retryButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Retry", for: .normal)
+        button.setTitleColor(Commons.getColorFromHex(hex: "#5c6160"),
+                             for: .normal)
+        button.isHidden = true
+        return button
+    }()
+    
+    weak var delegate: LoaderViewDelegate?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         addViews()
         createViews()
+        setViews()
         loader.startAnimating()
         self.backgroundColor = .white
     }
@@ -45,19 +62,23 @@ final class LoaderView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func startLoader() {
+    func startLoader(message: String? = nil) {
         loader.isHidden = false
         loader.startAnimating()
+        messageLabel.text = message
+        retryButton.isHidden = true
     }
     
     func stopLoader() {
         loader.isHidden = true
+        retryButton.isHidden = true
         loader.stopAnimating()
     }
     
-    func setMessage(text: String?, shouldHideLoader: Bool) {
+    func setMessage(text: String?, shouldHideLoader: Bool, showRetryButton: Bool) {
         messageLabel.text = text
         shouldHideLoader ? stopLoader() : startLoader()
+        retryButton.isHidden = !showRetryButton
     }
 }
 
@@ -67,6 +88,17 @@ private extension LoaderView {
         addSubview(containerView)
         containerView.addSubview(loader)
         containerView.addSubview(messageLabel)
+        containerView.addSubview(retryButton)
+    }
+    
+    func setViews() {
+        retryButton.addTarget(self,
+                              action: #selector(didClickRetryButton),
+                              for: .touchUpInside)
+    }
+    
+    @objc func didClickRetryButton() {
+        self.delegate?.didClickRetryButton(self)
     }
     
     func createViews() {
@@ -88,5 +120,13 @@ private extension LoaderView {
         NSLayoutConstraint(item: messageLabel, attribute: .leading, relatedBy: .equal, toItem: containerView, attribute: .leading, multiplier: 1, constant: 12).isActive = true
         
         NSLayoutConstraint(item: messageLabel, attribute: .trailing, relatedBy: .equal, toItem: containerView, attribute: .trailing, multiplier: 1, constant: -12).isActive = true
+        
+        NSLayoutConstraint(item: retryButton, attribute: .centerX, relatedBy: .equal, toItem: containerView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        
+        NSLayoutConstraint(item: retryButton, attribute: .top, relatedBy: .equal, toItem: loader, attribute: .bottom, multiplier: 1, constant: 12).isActive = true
+        
+        NSLayoutConstraint(item: retryButton, attribute: .leading, relatedBy: .greaterThanOrEqual, toItem: containerView, attribute: .leading, multiplier: 1, constant: 12).isActive = true
+        
+        NSLayoutConstraint(item: retryButton, attribute: .trailing, relatedBy: .equal, toItem: containerView, attribute: .trailing, multiplier: 1, constant: -12).isActive = true
     }
 }

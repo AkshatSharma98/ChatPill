@@ -7,7 +7,7 @@
 
 import Foundation
 
-class ChatMessage: Codable {
+final class ChatMessage: Codable {
     let message: String?
     let type: ChatType?
     
@@ -17,7 +17,7 @@ class ChatMessage: Codable {
     }
 }
 
-class ChatHistory {
+final class ChatHistory {
     let name: String?
     let id: String?
     let messages: [ChatMessage]?
@@ -35,7 +35,7 @@ protocol ChatManagerProtocol: AnyObject {
 }
 
 
-class ChatManager: ChatManagerProtocol {
+final class ChatManager: ChatManagerProtocol {
     
     let cdChatRepo: CDChatRepo = CDChatRepo()
     

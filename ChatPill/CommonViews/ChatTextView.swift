@@ -12,7 +12,7 @@ protocol ChatTextViewDelegate: AnyObject {
     func heightChanged(_ forClass: ChatTextView)
 }
 
-class ChatTextView: UIView {
+final class ChatTextView: UIView {
     
     ///MARK: Constants
     private let minHeight: CGFloat = 40

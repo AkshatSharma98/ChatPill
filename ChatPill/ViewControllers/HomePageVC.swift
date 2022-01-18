@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class HomePageVC: UIViewController {
+final class HomePageVC: UIViewController {
     
     ///MARK: ViewModel
     private var vm: HomePageVM?
@@ -52,11 +52,13 @@ class HomePageVC: UIViewController {
         addViews()
         createViews()
         setupTableView()
+        loaderView.delegate = self
         
         vm = HomePageVM(delegate: self)
-        vm?.getUsers()
+        vm?.vmDidLoad()
+        
         view.backgroundColor = .white
-        showLoader()
+        showLoader(message: "Welcome To GitHub Chat")
     }
     
 }
@@ -103,7 +105,7 @@ private extension HomePageVC {
         loaderView.stopLoader()
     }
     
-    func showLoader() {
+    func showLoader(message: String? = nil) {
         view.bringSubviewToFront(loaderView)
         loaderView.isHidden = false
         loaderView.startLoader()
@@ -165,9 +167,24 @@ extension HomePageVC: UITableViewDelegate {
 
 ///MARK: HomePageVMDelegate
 extension HomePageVC: HomePageVMDelegate {
+    func didFetchUsers(_ forClass: HomePageVM) {
+        hideLoaderView()
+        tableView.reloadData()
+    }
     
-    func didFetchUsers() {
-        self.hideLoaderView()
-        self.tableView.reloadData()
+    func didFailToFetch(_ forClass: HomePageVM, message: String?) {
+        view.bringSubviewToFront(loaderView)
+        loaderView.setMessage(text: message,
+                              shouldHideLoader: true,
+                              showRetryButton: true)
+    }
+}
+
+///MARK: LoaderViewDelegate
+extension HomePageVC: LoaderViewDelegate {
+    
+    func didClickRetryButton(_ forClass: LoaderView) {
+        showLoader()
+        vm?.getData()
     }
 }

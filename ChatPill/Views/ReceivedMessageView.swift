@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class ReceivedMessageView: UIView {
+final class ReceivedMessageView: UIView {
     
     let containerView: UIView = {
         let view = UIView()

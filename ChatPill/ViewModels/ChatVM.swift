@@ -11,7 +11,7 @@ protocol ChatVMDelegate: AnyObject {
     func updateView()
 }
 
-class ChatVM {
+final class ChatVM {
     
     private let id: String
     private let name: String

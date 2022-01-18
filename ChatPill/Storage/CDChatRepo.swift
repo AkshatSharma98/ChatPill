@@ -39,7 +39,7 @@ final class CDChatRepo: ChatManagerProtocol {
     }
 }
 
-extension CDChatRepo {
+private extension CDChatRepo {
     
     func getChatHistory(from id: String) -> CDChat? {
         

@@ -12,7 +12,7 @@ enum ChatType: Codable {
     case sent
 }
 
-class ChatMessageModel {
+final class ChatMessageModel {
     let text: String?
     let type: ChatType
     

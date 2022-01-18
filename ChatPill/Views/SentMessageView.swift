@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class SentMessageView: UIView {
+final class SentMessageView: UIView {
     
     ///MARK: Constants
     private let sizeRatio: CGFloat = 0.5

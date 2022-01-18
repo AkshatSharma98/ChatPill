@@ -8,13 +8,14 @@
 import Foundation
 import UIKit
 
-class ChatVC: UIViewController {
+final class ChatVC: UIViewController {
     
     ///MARK:  Private Vars
     private var tableViewBottomConstraint: NSLayoutConstraint?
     private var isKeyboardVisible: Bool = false
     private var vm: ChatVM?
     private let name: String
+    private let animationDuration = 0.2
     
     ///MARK: UI Components
     private let tableView: UITableView = {
@@ -135,7 +136,8 @@ private extension ChatVC {
             tableViewBottomConstraint?.constant = -keyboardHeight
             self.bottomTextView.updateHeightConstraint(newValue: -keyboardHeight)
             tableView.contentInset.bottom = bottomTextView.containerView.frame.height
-            UIView.animate(withDuration: 0.2, animations: { [weak self] in
+            
+            UIView.animate(withDuration: animationDuration, animations: { [weak self] in
                 self?.view.layoutIfNeeded()
             }, completion: { [weak self] _ in
                 self?.scrollToBottom(animated: true)
@@ -147,7 +149,8 @@ private extension ChatVC {
         isKeyboardVisible = false
         tableViewBottomConstraint?.constant = 0
         self.bottomTextView.updateHeightConstraint(newValue: -Commons.getNotchHeight())
-        UIView.animate(withDuration: 0.2, animations: { [weak self] in
+        
+        UIView.animate(withDuration: animationDuration, animations: { [weak self] in
             self?.view.layoutIfNeeded()
         }, completion:  { [weak self] _ in
             self?.scrollToBottom(animated: true)
@@ -163,11 +166,6 @@ private extension ChatVC {
             self?.tableView.scrollToRow(at: indexPath, at: .bottom, animated: animated)
         }
     }
-}
-
-///MARK: UITableViewDelegate
-extension ChatVC: UITableViewDelegate {
-    
 }
 
 ///MARK: UITableViewDataSource
@@ -211,16 +209,24 @@ extension ChatVC: ChatVMDelegate {
 
 ///MARK: BottomTextViewDelegate
 extension ChatVC: BottomTextViewDelegate {
-    func updateInsetIfNeeded(height: CGFloat) {
+    
+    func didClickSendButton(_ forClass: BottomTextView, text: String) {
+        bottomTextView.setTextViewToNil()
+        vm?.didClickSend(message: text)
+    }
+    
+    func updateInsetIfNeeded(_ forClass: BottomTextView, height: CGFloat) {
         UIView.animate(withDuration: 0.14) { [weak self] in
             self?.tableView.contentInset.bottom = height
         } completion: { [weak self] _ in
             self?.scrollToBottom()
         }
     }
-    
-    func didClickSendButton(text: String) {
-        bottomTextView.setTextViewToNil()
-        vm?.didClickSend(message: text)
-    }
 }
+
+
+///MARK: UITableViewDelegate
+extension ChatVC: UITableViewDelegate {
+    
+}
+
